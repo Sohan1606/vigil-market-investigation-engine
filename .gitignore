@@ -1,0 +1,17 @@
+.env
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+data/raw/*
+data/lake/*
+data/processed/*
+!data/**/.gitkeep
+reports/results/*.json
+reports/figures/*
+node_modules/
+*.log
+spark-warehouse/
+.DS_Store

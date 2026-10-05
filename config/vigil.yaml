@@ -1,0 +1,91 @@
+# VIGIL — Market Investigation Engine : canonical configuration
+project:
+  name: VIGIL
+  tagline: "Investigate before you believe."
+  version: "1.0.1"
+  mode: DEMO            # DEMO (deterministic, local artifacts) | LIVE (re-fetch from source)
+  seed: 20260101
+
+universe:
+  # Indian market (NSE) case study. Configurable — nothing downstream hardcodes a symbol.
+  benchmark: "^NSEI"
+  equities:
+    - {symbol: "RELIANCE.NS",   name: "Reliance Industries", sector: "ENERGY"}
+    - {symbol: "TCS.NS",        name: "Tata Consultancy",    sector: "IT"}
+    - {symbol: "INFY.NS",       name: "Infosys",             sector: "IT"}
+    - {symbol: "HDFCBANK.NS",   name: "HDFC Bank",           sector: "BANKING"}
+    - {symbol: "ICICIBANK.NS",  name: "ICICI Bank",          sector: "BANKING"}
+    - {symbol: "SBIN.NS",       name: "State Bank of India", sector: "BANKING"}
+    - {symbol: "AXISBANK.NS",   name: "Axis Bank",           sector: "BANKING"}
+    - {symbol: "ITC.NS",        name: "ITC",                 sector: "FMCG"}
+    - {symbol: "HINDUNILVR.NS", name: "Hindustan Unilever",  sector: "FMCG"}
+    - {symbol: "MARUTI.NS",     name: "Maruti Suzuki",       sector: "AUTO"}
+    - {symbol: "M&M.NS",        name: "Mahindra & Mahindra", sector: "AUTO"}
+    - {symbol: "SUNPHARMA.NS",  name: "Sun Pharma",          sector: "PHARMA"}
+    - {symbol: "LT.NS",         name: "Larsen & Toubro",     sector: "INFRA"}
+    - {symbol: "BHARTIARTL.NS", name: "Bharti Airtel",       sector: "TELECOM"}
+  sector_indices:
+    BANKING: "^NSEBANK"
+  start: "2017-01-01"
+  end: null              # null => today
+
+storage:
+  mode: local                       # local | hdfs  (env STORAGE_MODE overrides; see docs/HDFS.md)
+  lake_root: "data/lake"            # partitioned Parquet lake used when mode=local
+  raw_root: "data/raw"
+  processed_root: "data/processed"
+  hdfs_uri: null                    # e.g. "hdfs://localhost:9000" — required when mode=hdfs
+  hdfs_prefix: "/vigil"             # root path inside HDFS when mode=hdfs
+  docstore:
+    uri: null                       # e.g. "mongodb://localhost:27017" (env MONGODB_URI overrides)
+    database: "vigil"
+    local_path: "data/processed/docstore"
+
+spark:
+  master: "local[2]"
+  driver_memory: "512m"
+  shuffle_partitions: 4
+
+streaming:
+  kafka_bootstrap: null             # env KAFKA_BOOTSTRAP_SERVERS overrides; null => deterministic replay bus
+  topic: "vigil.market.events"
+  bloom_bits: 1048576
+  bloom_hashes: 7
+  dgim_window: 2048
+
+features:
+  version: "fv-1.3.0"
+  horizons: [1, 3, 5, 20]
+  rsi_period: 14
+  vol_window: 20
+
+models:
+  train_start: "2017-06-01"
+  walk_forward:
+    train_years: 3
+    test_months: 6
+    min_train_rows: 400
+  lstm:
+    sequence_length: 20
+    hidden: 32
+    epochs: 12
+    lr: 0.003
+    batch_size: 64
+
+decision:
+  # Decision Gate thresholds — all documented in docs/evaluation.md
+  min_data_quality: 85.0
+  min_edge_bps: 12.0            # expected edge must exceed cost by this margin
+  min_model_agreement: 0.55
+  max_uncertainty: 0.62
+  abstain_band: 0.055           # |p - 0.5| below this => NO ACTION
+  drift_block: "DEGRADED"
+
+costs:
+  commission_bps: 3.0
+  slippage_bps: 5.0
+  impact_bps: 1.0
+
+risk:
+  var_confidence: 0.95
+  max_position_vol: 0.045

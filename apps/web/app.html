@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VIGIL · Market Investigation Engine</title>
+<meta name="description" content="VIGIL — investigate before you believe. A market investigation and decision-support engine.">
+<link rel="stylesheet" href="/static/css/vigil.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='9' fill='%236E5BFF'/></svg>">
+</head>
+<body>
+<a class="sr-only" href="#view">Skip to content</a>
+<div class="shell">
+  <nav class="rail" aria-label="VIGIL spaces">
+    <a class="brand" href="/">
+      <span class="dot" aria-hidden="true"></span>
+      <span>
+        <span class="mono" style="font-size:13px;letter-spacing:.2em">VIGIL</span>
+        <span class="q" style="display:block;font-size:10.5px;color:var(--faint)">Investigate before you believe</span>
+      </span>
+    </a>
+    <div class="nav" id="rail-nav"></div>
+    <div class="rail-foot">
+      <span class="mode-badge" id="mode-badge">HISTORICAL REPLAY</span>
+      <p class="faint" style="font-size:10.5px;line-height:1.5;margin:0">
+        Research and decision-support only. Not investment advice, not a trading system.
+      </p>
+    </div>
+  </nav>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="search">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path>
+        </svg>
+        <input id="search" type="search" placeholder="Search instruments, cases, models, experiments, architecture  ( / )"
+               aria-label="Global search" autocomplete="off">
+        <div class="results panel" id="search-results" role="listbox" aria-label="Search results"></div>
+      </div>
+      <div class="pillset">
+        <span class="meta hide-sm" id="crumb"></span>
+        <button class="tag idle" id="health-pill" type="button" aria-label="VIGIL system health">VIGIL HEALTH: …</button>
+        <button class="btn sm ghost" id="pin-btn" type="button" title="Pin this view to the workspace">✛</button>
+        <button class="btn sm ghost" id="refresh-btn" type="button" title="Clear client cache and reload the view">↻</button>
+        <button class="btn sm" id="ask-btn" type="button">Ask VIGIL</button>
+      </div>
+    </header>
+    <main class="view" id="view" tabindex="-1"></main>
+  </div>
+</div>
+<script type="module" src="/static/js/app.js"></script>
+</body>
+</html>

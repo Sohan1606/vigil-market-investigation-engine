@@ -1,0 +1,28 @@
+# Two services, not a dozen. VIGIL itself, plus one optional MongoDB.
+# Kafka and HDFS are intentionally NOT containerised: VIGIL implements the same semantics
+# locally (replay bus, Hive-partitioned Parquet lake) and switching to real clusters is a
+# matter of setting KAFKA_BOOTSTRAP_SERVERS / HDFS_URI. See docs/ARCHITECTURE.md.
+services:
+  vigil:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: vigil:latest
+    ports: ["8000:8000"]
+    environment:
+      VIGIL_MODE: DEMO
+      MONGODB_URI: ${MONGODB_URI:-}
+      VIGIL_CORS_ORIGINS: http://localhost:8000
+    volumes:
+      - ../data:/app/data
+      - ../reports:/app/reports
+    command: uvicorn vigil.api.app:app --host 0.0.0.0 --port 8000
+
+  mongo:
+    image: mongo:7
+    profiles: ["mongo"]        # docker compose --profile mongo up
+    ports: ["27017:27017"]
+    volumes: ["vigil-mongo:/data/db"]
+
+volumes:
+  vigil-mongo:

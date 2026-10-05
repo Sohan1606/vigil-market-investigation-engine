@@ -1,0 +1,29 @@
+# VIGIL core requirements — everything needed to run the pipeline, the API and the tests.
+# Optional extras (Spark, Torch) live in requirements-extras.txt; VIGIL degrades gracefully
+# without them and reports which engine actually ran.
+
+# Core
+numpy>=1.26
+pandas>=2.1
+scipy>=1.11
+pyyaml>=6.0
+python-dotenv>=1.0
+# Storage / Big Data
+pyarrow>=14.0           # parquet IO; also the HDFS client when STORAGE_MODE=hdfs
+pymongo>=4.6            # used when MONGODB_URI is set
+mongita>=1.1            # local MongoDB-API-compatible fallback document store
+# ML
+scikit-learn>=1.4
+xgboost>=2.0
+# Graph / analytics / viz
+networkx>=3.2
+matplotlib>=3.8
+# Data source
+yfinance>=0.2.40
+# API
+fastapi>=0.110
+uvicorn[standard]>=0.29
+# Reporting / tests
+reportlab>=4.0
+pytest>=8.0
+httpx>=0.27             # required by fastapi's TestClient, i.e. by tests/test_api.py

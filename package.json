@@ -1,0 +1,17 @@
+{
+  "name": "vigil-ui-smoke",
+  "version": "1.0.1",
+  "private": true,
+  "description": "Front-end smoke test harness for VIGIL — Investigate before you believe.",
+  "type": "module",
+  "scripts": {
+    "ui-smoke": "node tests/run_ui_smoke.mjs",
+    "ui-smoke:attach": "node tests/ui_smoke.mjs"
+  },
+  "devDependencies": {
+    "jsdom": "^26.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

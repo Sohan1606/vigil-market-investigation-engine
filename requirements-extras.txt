@@ -1,0 +1,10 @@
+# Optional extras — VIGIL runs completely without them, with documented fallbacks.
+#
+#   pyspark : distributed feature engineering. Without it (or without a JDK) the feature job
+#             falls back to the pandas engine and says so in reports/results/feature_build.json.
+#   torch   : the LSTM entry in the model tournament. Without it the tournament runs the other
+#             model families and records the LSTM row as unavailable.
+#
+#   pip install -r requirements-extras.txt
+pyspark>=4.0.0          # requires JAVA_HOME (JDK 17+ for Spark 4, JDK 11 for Spark 3.5)
+torch>=2.2              # CPU build is sufficient

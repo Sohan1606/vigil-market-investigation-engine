@@ -1,0 +1,21 @@
+{
+  "run_id": "R-20261004173057-5d96f6",
+  "name": "smoke",
+  "created_at": "2026-10-04T17:30:57+00:00",
+  "seed": 20260101,
+  "feature_version": "fv-1.3.0",
+  "config_fingerprint": "e4d2d654bff4f5a3",
+  "git_commit": null,
+  "environment": {
+    "python": "3.13.14",
+    "platform": "Linux-6.1.158+-x86_64-with-glibc2.41"
+  },
+  "params": {
+    "a": 1
+  },
+  "metrics": {
+    "b": 2
+  },
+  "artifacts": [],
+  "tags": {}
+}
