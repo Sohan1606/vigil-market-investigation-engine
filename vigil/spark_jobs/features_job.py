@@ -158,7 +158,7 @@ def _pandas_features(lake: DataLake, cfg: VigilConfig) -> pd.DataFrame:
     bench_logret = np.log(bench_df["close"]).diff()
 
     frames = []
-    for sym, g in df[df["symbol"].isin(list(sector_map))].groupby("symbol"):
+    for sym, g in df[df["symbol"].isin(list(sector_map))].groupby("symbol", observed=True):
         g = g.sort_values("date").set_index("date").copy()
         close, vol = g["close"], g["volume"]
         g["ret_1"], g["ret_5"], g["ret_20"] = close.pct_change(), close.pct_change(5), close.pct_change(20)

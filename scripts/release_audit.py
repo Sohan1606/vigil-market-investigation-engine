@@ -18,6 +18,7 @@ reports/results/release_audit.json. Exit code 0 only when there is no FAIL. `NOT
   9  baselines present and beaten-or-not reported
 """
 from __future__ import annotations
+import os
 
 import json
 import re
@@ -48,9 +49,9 @@ def c01_leakage(pytest_result: dict) -> None:
     if not pytest_result.get("executed"):
         rec.add("1. Leakage", "Leakage suite executed", NOT_EXECUTED, pytest_result.get("detail", ""))
         return
-    targeted = subprocess.run([sys.executable, "-m", "pytest", "tests/test_leakage.py", "-q",
-                               "--no-header", "-p", "no:cacheprovider"],
-                              cwd=ROOT, capture_output=True, text=True)
+    targeted = subprocess.run([sys.executable, "-m", "pytest", "-q",
+                               "--no-header", "-o", "pythonpath=.", "-p", "no:cacheprovider", "tests/test_leakage.py"],
+                              env=dict(os.environ, PYTHONPATH=str(ROOT)), cwd=ROOT, capture_output=True, text=True)
     ok = targeted.returncode == 0
     rec.add("1. Leakage", "No future information in features, gating or signals",
             PASS if ok else FAIL,
@@ -60,9 +61,9 @@ def c01_leakage(pytest_result: dict) -> None:
 
 
 def c02_pit() -> None:
-    proc = subprocess.run([sys.executable, "-m", "pytest", "tests/test_pit_and_replay.py", "-q",
-                           "--no-header", "-p", "no:cacheprovider"],
-                          cwd=ROOT, capture_output=True, text=True)
+    proc = subprocess.run([sys.executable, "-m", "pytest", "-q",
+                           "--no-header", "-o", "pythonpath=.", "-p", "no:cacheprovider", "tests/test_pit_and_replay.py"],
+                          env=dict(os.environ, PYTHONPATH=str(ROOT)), cwd=ROOT, capture_output=True, text=True)
     t = load_result("tournament_h1.json") or {}
     purge = (t.get("protocol") or {}).get("purge_sessions")
     rec.add("2. Point-in-time", "Replay and PIT discipline verified",
@@ -144,9 +145,9 @@ def c05_api() -> dict:
 
 
 def c06_non_repetition() -> None:
-    proc = subprocess.run([sys.executable, "-m", "pytest", "tests/test_non_repetition.py", "-q",
-                           "--no-header", "-p", "no:cacheprovider"],
-                          cwd=ROOT, capture_output=True, text=True)
+    proc = subprocess.run([sys.executable, "-m", "pytest", "-q",
+                           "--no-header", "-o", "pythonpath=.", "-p", "no:cacheprovider", "tests/test_non_repetition.py"],
+                          env=dict(os.environ, PYTHONPATH=str(ROOT)), cwd=ROOT, capture_output=True, text=True)
     rec.add("6. Non-repetition", "One canonical home per concept",
             PASS if proc.returncode == 0 else FAIL,
             f"tests/test_non_repetition.py → "

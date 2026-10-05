@@ -47,7 +47,7 @@ Two categories of defect dominated:
 | 5 | Execution semantics disagreed | docs said "next session close", code used `fwd_ret_1[t]`; costs described inconsistently | one convention, stated once: signal at the **close of session t**, entry at that close, exit at the close of t+h, realised return `fwd_ret_1[t] = close[t+1] / close[t] - 1`, full round trip 18.0 bps; `ADAPTIVE_GATE_T1` publishes the one-session-delayed variant; `tests/test_backtest_semantics.py` checks code, artefact and docs agree | Ambiguous accounting makes a backtest unfalsifiable |
 | 6 | Unsafe pipeline default | `--all` implied horizons 1/3/5/20 and was OOM-killed on small machines | default is **horizon 1**; extended horizons are explicit (`--horizons 1 3 5 20`); README and scripts match | A first run must not silently cost 4x the documented compute |
 | 7 | Summary merge lost stages | a second `--stage models` overwrote the first | true recursive merge: `models.horizon_1` and `models.horizon_5` coexist; deterministic sorted output; intentional scalar overwrites are logged; `tests/test_pipeline_summary.py` | Stage-by-stage execution is the documented low-memory path |
-| 8 | One flattering coverage number | "news coverage 5.579% of sessions" conflated two measurements | **DIRECT SESSION COVERAGE 2.0967%** and **ROLLING 5-DAY CONTEXT ROWS 5.579%** (1,878/33,661) reported separately in the README, this report, SCIENTIFIC_METHOD and the UI | The larger number described the feature window, not the data |
+| 8 | One flattering coverage number | "news coverage 5.675% of sessions" conflated two measurements | **DIRECT SESSION COVERAGE 2.0933%** and **ROLLING 5-DAY CONTEXT ROWS 5.675%** (1,878/33,661) reported separately in the README, this report, SCIENTIFIC_METHOD and the UI | The larger number described the feature window, not the data |
 | 9 | "Causal" language | "causal 5-day news aggregates" | "timestamp-aware 5-day news aggregates"; observed / inferred / predicted / causally-established remain distinct in the UI | VIGIL measures association and has established no causation |
 | 10 | Fingerprints hashed names and sizes | a same-length edit produced an identical fingerprint | BLAKE2b-64 over file **content**; manifests sorted by repo-relative path, deterministic across machines; `tests/test_fingerprints.py` includes the same-length-edit case | Lineage that cannot detect a change is decoration |
 | 11 | Self-audit checked file existence | 24/24 PASS, infrastructure included | properties are recomputed (fold ordering, metric identities, counter agreement, fingerprint sensitivity, cost consistency); states are PASS / PARTIAL / FAIL / **NOT EXECUTED**; absent infrastructure can never become PASS | An audit that cannot fail is not an audit |
@@ -103,8 +103,8 @@ guarantee, not an executed Windows run.
 33,661 rows · 38 features (`fv-1.3.0`) · 14 symbols ·
 2017-01-02 → 2026-10-01 · data-quality score 98.61/100
 (1,072 rows quarantined, 0 rejected, of 38,607 ingested).
-News: 1,377 real headlines · **DIRECT SESSION COVERAGE 2.0967%** ·
-**ROLLING 5-DAY CONTEXT ROWS 5.579%** (1,878 rows).
+News: 1,377 real headlines · **DIRECT SESSION COVERAGE 2.0933%** ·
+**ROLLING 5-DAY CONTEXT ROWS 5.675%** (1,878 rows).
 
 ### Model tournament (h=1, walk-forward rolling origin, 14 folds, 23,331 out-of-sample rows, purge 2 sessions)
 
@@ -134,8 +134,8 @@ Convention: entry at the **close of session t**, exit at the close of t+1, full 
 | Buy And Hold | 13.022% | 0.371 | -37.207% | 53.96% | 0.0% |
 | Always Long Signal | -27.907% | -2.848 | -89.359% | 39.63% | 0.0% |
 | Model | -16.229% | -1.345 | -75.629% | 21.52% | 53.6% |
-| Adaptive Gate | -7.0% | -0.934 | -54.961% | 8.81% | 82.13% |
-| Adaptive Gate T1 | -13.464% | -1.27 | -65.729% | 7.79% | 82.13% |
+| Adaptive Gate | -8.928% | -0.934 | -54.961% | 8.81% | 82.13% |
+| Adaptive Gate T1 | -12.964% | -1.27 | -65.729% | 7.79% | 82.13% |
 
 **Headline honest finding: the daily directional edge does not survive transaction costs.**
 `ADAPTIVE_GATE_T1` is the same policy executed one session late — the honest sensitivity to
@@ -288,8 +288,8 @@ HDFS IO against a NameNode; neither is counted as a pass and neither is claimed 
 ## 9. Known limitations (refreshed for v1.0.1 — obsolete entries removed)
 
 1. **News coverage is thin, in two distinct senses.** Direct same-session coverage is
-   2.0967%; rolling 5-day context reaches
-   5.579% of modelling rows. Google News RSS serves only a recent
+   2.0933%; rolling 5-day context reaches
+   5.675% of modelling rows. Google News RSS serves only a recent
    window. Rows without news are marked MISSING, never imputed — which is also why the news
    experiment is NOT SUPPORTED.
 2. **The HDFS and Hadoop code paths have never run against a cluster here** (§7); they are covered

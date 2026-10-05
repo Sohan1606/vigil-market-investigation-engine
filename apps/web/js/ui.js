@@ -136,7 +136,7 @@ export function reliabilityChart(rows, { height = 190 } = {}) {
 
 export function gauge(valuePct, label, kind = 'idle') {
   const W = 150, H = 92, cx = W / 2, cy = 78, r = 58;
-  const svg = s('svg', { class: 'chart', viewBox: `0 0 ${W} ${H}`, role: 'img', 'aria-label': `${label}: ${valuePct}` });
+  const svg = s('svg', { class: 'chart gauge-svg', viewBox: `0 0 ${W} ${H}`, role: 'img', 'aria-label': `${label}: ${valuePct}` });
   const arc = (frac, color, width) => {
     const a0 = Math.PI, a1 = Math.PI + Math.PI * frac;
     const x0 = cx + r * Math.cos(a0), y0 = cy + r * Math.sin(a0);

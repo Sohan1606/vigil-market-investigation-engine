@@ -15,6 +15,7 @@ Two rules govern this script:
 Output: reports/SELF_AUDIT.md + reports/results/self_audit.json
 """
 from __future__ import annotations
+import os
 
 import json
 import re

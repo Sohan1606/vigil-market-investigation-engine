@@ -64,7 +64,7 @@ async function bootHealth() {
   document.getElementById('mode-badge').textContent = h.data_mode;
 }
 
-document.getElementById('pin-btn').onclick = () => {
+function handleNewInvestigation() {
   const pins = JSON.parse(localStorage.getItem('vigil.pins') || '[]');
   const route = location.hash || '#pulse';
   if (!pins.some(p => p.route === route)) {
@@ -72,7 +72,18 @@ document.getElementById('pin-btn').onclick = () => {
     localStorage.setItem('vigil.pins', JSON.stringify(pins));
   }
   location.hash = '#workspace';
-};
+}
+
+const pinBtn = document.getElementById('pin-btn');
+if (pinBtn) {
+  pinBtn.onclick = handleNewInvestigation;
+  pinBtn.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      handleNewInvestigation();
+    }
+  });
+}
 
 const searchInput = document.getElementById('search');
 const searchOut = document.getElementById('search-results');
@@ -95,7 +106,29 @@ searchInput.addEventListener('input', () => {
     searchOut.classList.add('open');
   }, 180);
 });
-searchInput.addEventListener('keydown', e => { if (e.key === 'Escape') { searchOut.classList.remove('open'); searchInput.blur(); } });
+searchInput.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    searchOut.classList.remove('open');
+    searchInput.blur();
+  } else if (e.key === 'Enter') {
+    e.preventDefault();
+    const firstHit = searchOut.querySelector('a');
+    if (firstHit && firstHit.getAttribute('href') && firstHit.getAttribute('href') !== '#') {
+      firstHit.click();
+    } else {
+      const q = searchInput.value.trim();
+      if (q.length > 0) {
+        api(`/search?q=${encodeURIComponent(q)}`).then(r => {
+          if (r && r.results && r.results.length) {
+            searchOut.classList.remove('open');
+            searchInput.value = '';
+            location.hash = r.results[0].route;
+          }
+        });
+      }
+    }
+  }
+});
 addEventListener('click', e => { if (!e.target.closest('.search')) searchOut.classList.remove('open'); });
 addEventListener('keydown', e => {
   if ((e.key === '/' || (e.key === 'k' && (e.metaKey || e.ctrlKey))) && document.activeElement !== searchInput) {

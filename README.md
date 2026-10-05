@@ -19,7 +19,7 @@ VIGIL's own measured conclusion, reported exactly as it came out of the pipeline
 > On 14 NSE equities over ~11 years, next-session directional edge is real but tiny
 > (winner `random_forest`, ROC-AUC ≈ 0.52, Brier ≈ 0.2497 versus a 0.25 coin). **It does not
 > survive 18 bps of round-trip cost.** The cost-aware portfolio backtest loses money:
-> ADAPTIVE_GATE −7.0% annualised (−13.464% when execution is delayed one session) against
+> ADAPTIVE_GATE -8.928% annualised (−13.464% when execution is delayed one session) against
 > BUY_AND_HOLD +13.022%. Of six research hypotheses, five are NOT SUPPORTED. The one supported
 > result is that *abstaining* beats trading everything: on the research arm, forced trading
 > returns −13.98 bps per trade while the cost-gated policy returns +2.02 bps per trade
@@ -171,8 +171,8 @@ News coverage is published as **two distinct measurements**, never merged:
 
 | Measurement | Value | Definition |
 |---|---|---|
-| **DIRECT SESSION COVERAGE** | **2.0967%** | (symbol, session) pairs with a headline published *on that session* — `reports/results/ingestion_summary.json` |
-| **ROLLING 5-DAY CONTEXT ROWS** | **5.579%** | modelling rows with ≥1 headline anywhere in the trailing 5 sessions, which is what the news features actually see — `reports/results/dataset_meta.json` |
+| **DIRECT SESSION COVERAGE** | **2.0933%** | (symbol, session) pairs with a headline published *on that session* — `reports/results/ingestion_summary.json` |
+| **ROLLING 5-DAY CONTEXT ROWS** | **5.675%** | modelling rows with ≥1 headline anywhere in the trailing 5 sessions, which is what the news features actually see — `reports/results/dataset_meta.json` |
 
 The 5-day aggregation is **timestamp-aware**, not causal: only headlines published at or before
 the session close enter the window, which makes the feature computable in real time. It says

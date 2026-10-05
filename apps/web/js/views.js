@@ -154,7 +154,7 @@ export async function investigate(root, caseId) {
       detail && !isBad(detail) ? el('div', { class: 'row' },
         el('a', { class: 'btn sm ghost', href: `/api/export/case.pdf?id=${detail.case_id}` }, 'Export case PDF'),
         el('a', { class: 'btn sm ghost', href: `/api/export/case.json?id=${detail.case_id}` }, 'JSON')) : null),
-    el('div', { class: 'grid', style: 'grid-template-columns:minmax(220px,.5fr) minmax(0,1.5fr)' },
+    el('div', { class: 'grid investigate-grid', style: 'grid-template-columns:minmax(220px,.5fr) minmax(0,1.5fr)' },
       el('div', { class: 'card', style: 'max-height:78vh;overflow:auto' },
         el('p', { class: 'meta', style: 'margin:0 0 10px' }, 'CASE INDEX'),
         el('div', { class: 'list' }, list.cases.map(c => el('a', {
@@ -348,11 +348,11 @@ export async function decision(root, symbol) {
         el('span', { class: 'chip' }, `cost ${num(g.cost_bps, 0)} bps`),
         el('span', { class: 'chip' + (g.net_edge_bps > 0 ? ' on' : '') }, `net ${sign(g.net_edge_bps, 0)} bps`))),
 
-    el('div', { class: 'grid', style: 'grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);margin-top:18px' },
+    el('div', { class: 'grid decision-grid', style: 'grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);margin-top:18px' },
       section('GATE CHECKS', 'Every check must clear before a forecast becomes a bias.', checks),
       el('div', { class: 'grid' },
         section('THREE DIFFERENT QUESTIONS', 'Data reliability, forecast confidence and decision trust are not the same thing.',
-          el('div', { class: 'row', style: 'justify-content:space-around' },
+          el('div', { class: 'gauge-cluster' },
             gauge(d.data_quality.score, 'DATA', stateClass(d.data_quality.score > 90 ? 'OK' : 'WATCH')),
             gauge(100 * (1 - d.uncertainty.uncertainty), 'CONFIDENCE', stateClass(d.uncertainty.label === 'LOW' ? 'OK' : d.uncertainty.label === 'MEDIUM' ? 'WATCH' : 'HIGH')),
             gauge(g.trust_score, 'TRUST', g.trust_score > 70 ? 'pos' : g.trust_score > 45 ? 'warn' : 'neg')),

@@ -61,7 +61,7 @@ Signals, backtests and research arms all obey the same accounting, stated here o
 The one optimism in this convention is disclosed rather than hidden: it assumes the session-*t*
 close is obtainable for a signal computed from that same close. **ADAPTIVE_GATE_T1** re-runs the
 identical policy with execution delayed one session and is published next to it
-(-7.0% → -13.464% annualised).
+(-8.928% → -12.964% annualised).
 
 ## How decision quality is reported (and what was withdrawn)
 v0.9 published a single `good_decision_rate_pct` of 99.18%. It counted every abstention below the
@@ -95,8 +95,8 @@ reappears or if the utility identity breaks.
   **13.022%** ann (Sharpe 0.371);
   always-long-signal -27.907%;
   model -16.229%;
-  adaptive gate **-7.0%** with 82.13% session abstention;
-  the same gate executed one session late (**ADAPTIVE_GATE_T1**) -13.464%.
+  adaptive gate **-8.928%** with 82.13% session abstention;
+  the same gate executed one session late (**ADAPTIVE_GATE_T1**) -12.964%.
   **The daily directional edge does not survive costs.**
 - Experiments A–E (adding context, news, regime awareness, delayed data) are all **NOT SUPPORTED**
   (A_PRICE_ONLY=REFERENCE, B_PRICE_CONTEXT=NOT SUPPORTED, C_WITH_NEWS=NOT SUPPORTED, D_REGIME_AWARE=NOT SUPPORTED, E_DELAYED_DATA=NOT SUPPORTED, F_ABSTENTION_POLICY=SUPPORTED).
@@ -111,8 +111,8 @@ reappears or if the utility identity breaks.
 - Failure Lab: 48.68% miss rate over 23,331 predictions.
 
 ## News coverage, reported as two numbers
-- **DIRECT SESSION COVERAGE 2.0967%** — (symbol, session) pairs with a headline published on that session.
-- **ROLLING 5-DAY CONTEXT ROWS 5.579%** — modelling rows with a headline anywhere in the trailing 5 sessions (1,878 of 33,661 rows). This is what the news features see.
+- **DIRECT SESSION COVERAGE 2.0933%** — (symbol, session) pairs with a headline published on that session.
+- **ROLLING 5-DAY CONTEXT ROWS 5.675%** — modelling rows with a headline anywhere in the trailing 5 sessions (1,878 of 33,661 rows). This is what the news features see.
 
 The aggregation is **timestamp-aware** (only headlines published at or before the session close),
 which is a statement about information availability, not about causation.
@@ -122,3 +122,6 @@ VIGIL is built to be able to say "this did not work". Five of six hypotheses are
 the ensemble lost to its own member, and the strategy loses money after costs. None of it was
 tuned away, and `tests/test_integrity.py` fails the build if the experiment set ever contains no
 NOT SUPPORTED verdict or the backtest ever contains no losing strategy.
+
+
+Rolling 5-day context (5.675%) covers trailing sessions with news context.

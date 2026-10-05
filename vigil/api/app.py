@@ -124,7 +124,7 @@ def health() -> Dict[str, Any]:
         "mapreduce_engine": mr_status["label"],
         "data_mode": "HISTORICAL / DETERMINISTIC REPLAY" if stream.get("bus_mode") != "KAFKA"
                      else "LIVE KAFKA STREAM",
-        "vigil_health": "HEALTHY" if not degraded else "PARTIAL",
+        "vigil_health": "HEALTHY" if not degraded else ("WATCH" if all(c["state"] in ("OK", "FALLBACK", "WATCH") for c in components) else "DEGRADED"),
         "components": components,
         "note": "VIGIL HEALTH describes the system. Forecast trust is a separate, per-forecast measure.",
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),

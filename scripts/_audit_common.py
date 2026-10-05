@@ -122,8 +122,9 @@ def mapreduce_state() -> Dict[str, Any]:
 
 
 def run_pytest(extra_args: Optional[List[str]] = None, timeout: int = 2400) -> Dict[str, Any]:
-    cmd = [sys.executable, "-m", "pytest", "tests", "-q", "--no-header",
-           "-p", "no:cacheprovider"] + (extra_args or [])
+    args = extra_args or ["tests"]
+    cmd = [sys.executable, "-m", "pytest", "-q", "--no-header",
+           "-o", "pythonpath=.", "-p", "no:cacheprovider"] + args
     try:
         proc = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True, timeout=timeout)
     except Exception as exc:
@@ -183,7 +184,7 @@ SCAN_SUFFIXES = {".py", ".md", ".js", ".mjs", ".html", ".css", ".yaml", ".yml", 
 # `data/` is NOT skipped wholesale any more: v1.0.0 shipped `_vigil_manifest.json` files holding
 # the build machine's absolute path, and excluding the directory hid it. Binary datasets are
 # skipped by suffix instead, so generated JSON/text metadata under data/ is inspected.
-SKIP_DIRS = {".git", "node_modules", "__pycache__", ".pytest_cache", ".venv", ".ruff_cache"}
+SKIP_DIRS = {".git", "node_modules", "__pycache__", ".pytest_cache", ".venv", ".ruff_cache", ".local"}
 BINARY_SUFFIXES = {".parquet", ".pq", ".bson", ".db", ".pkl", ".joblib", ".npy", ".npz",
                    ".png", ".jpg", ".jpeg", ".gif", ".pdf", ".zip", ".gz", ".ico", ".woff",
                    ".woff2", ".ttf", ".xlsx", ".docx", ".pptx"}
