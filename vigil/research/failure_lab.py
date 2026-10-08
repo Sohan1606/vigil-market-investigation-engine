@@ -150,7 +150,7 @@ def run_failure_lab(cfg: Optional[VigilConfig] = None, horizon: int = 1,
         "cemetery_size": len(tombstones),
         "note": "Attribution uses only variables observable at prediction time.",
     }
-    (cfg.reports_root / "results" / f"failure_lab_h{horizon}.json").write_text(json.dumps(out, indent=2, default=str))
+    (cfg.reports_root / "results" / f"failure_lab_h{horizon}.json").write_text(json.dumps(out, indent=2, default=str), encoding="utf-8")
     log.info("failure lab: %d misses, top cause=%s", len(misses),
              next(iter(out["failure_attribution"]), None))
     return out

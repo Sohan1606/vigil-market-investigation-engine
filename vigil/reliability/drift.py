@@ -135,7 +135,7 @@ def run_drift_monitor(cfg: Optional[VigilConfig] = None, horizon: int = 1) -> Di
                              if v["health"]["state"] in ("DEGRADED", "UNRELIABLE")],
         "window": "last 90 calendar days vs all prior history",
     }
-    (cfg.reports_root / "results" / f"drift_h{horizon}.json").write_text(json.dumps(report, indent=2))
+    (cfg.reports_root / "results" / f"drift_h{horizon}.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
     log.info("drift: %d high-PSI features, unhealthy models=%s",
              len(report["summary"]["high_psi_features"]), report["summary"]["unhealthy_models"])
     return report

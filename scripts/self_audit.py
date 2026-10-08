@@ -344,9 +344,9 @@ def audit_lineage() -> None:
     b = tree_fingerprint(pkg, ("*.py",))
     probe = pkg / "_audit_fingerprint_probe.py"
     try:
-        probe.write_text("PROBE = 1\n")
+        probe.write_text("PROBE = 1\n", encoding="utf-8")
         c = tree_fingerprint(pkg, ("*.py",))
-        probe.write_text("PROBE = 2\n")          # identical length, different content
+        probe.write_text("PROBE = 2\n", encoding="utf-8")          # identical length, different content
         d = tree_fingerprint(pkg, ("*.py",))
     finally:
         probe.unlink(missing_ok=True)
@@ -470,9 +470,9 @@ def main() -> int:
         out = pt["stdout"].replace(str(ROOT), ".").strip()[-3000:]
         extra = ["## Test run output", "", "```", out, "```"]
     md = rec.markdown("VIGIL self-audit", "scripts/self_audit.py", ts, extra)
-    (ROOT / "reports" / "SELF_AUDIT.md").write_text(md)
+    (ROOT / "reports" / "SELF_AUDIT.md").write_text(md, encoding="utf-8")
     (ROOT / "reports" / "results" / "self_audit.json").write_text(
-        json.dumps({"generated_at": ts, **rec.to_json()}, indent=2))
+        json.dumps({"generated_at": ts, **rec.to_json()}, indent=2), encoding="utf-8")
     rec.print_summary()
     print(f"\n→ reports/SELF_AUDIT.md")
     return rec.exit_code()

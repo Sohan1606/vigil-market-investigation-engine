@@ -149,7 +149,7 @@ def run_backtest(cfg: Optional[VigilConfig] = None, horizon: int = 1,
             "names over a single historical window — treat all figures as a research result, not "
             "an investable track record."),
     }
-    (cfg.reports_root / "results" / f"backtest_h{horizon}.json").write_text(json.dumps(out, indent=2))
+    (cfg.reports_root / "results" / f"backtest_h{horizon}.json").write_text(json.dumps(out, indent=2), encoding="utf-8")
     log.info("backtest: %s", {k: (v.get("annualised_return_pct"), v.get("sharpe"))
                               for k, v in results.items() if v.get("available")})
     return out

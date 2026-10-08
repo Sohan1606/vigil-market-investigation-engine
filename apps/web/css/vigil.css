@@ -286,6 +286,34 @@ svg.gauge-svg{flex:1 1 120px;max-width:180px;min-width:100px;width:100%;height:a
 /* ---------- topbar & button hardening ---------- */
 .icon-btn{min-width:32px;min-height:32px;padding:6px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:15px;line-height:1}
 
+/* ---------- inputs and dropdown controls ---------- */
+select, option, input[type="date"] {
+  font-family: inherit;
+  color: var(--text);
+  background-color: var(--ink-card);
+}
+select.chip {
+  color: var(--text);
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--line-strong);
+  border-radius: 7px;
+  cursor: pointer;
+}
+select.chip option {
+  background-color: #0E0F13;
+  color: #ECEDF2;
+  padding: 8px 12px;
+}
+select.chip option:checked, select.chip option:hover {
+  background-color: var(--indigo-soft);
+  color: var(--violet);
+}
+select.chip:focus, select.chip:focus-visible {
+  border-color: var(--violet);
+  outline: 2px solid var(--violet);
+  outline-offset: 2px;
+}
+
 /* ---------- responsive grid rules ---------- */
 .card, .panel, .view, main {
   min-width: 0;

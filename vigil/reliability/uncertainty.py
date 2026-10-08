@@ -127,6 +127,6 @@ def run_uncertainty(cfg: Optional[VigilConfig] = None, horizon: int = 1) -> Dict
             "unstable": sum(1 for v in stability_sample.values() if v.get("label") == "UNSTABLE"),
         },
     }
-    (cfg.reports_root / "results" / f"uncertainty_h{horizon}.json").write_text(json.dumps(summary, indent=2))
+    (cfg.reports_root / "results" / f"uncertainty_h{horizon}.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")
     log.info("conformal coverage: %s", coverage)
     return summary

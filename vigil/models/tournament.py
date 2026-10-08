@@ -119,7 +119,7 @@ def run_tournament(cfg: Optional[VigilConfig] = None, horizon: int = 1,
                        partition_cols=("model_id",))
         path = cfg.reports_root / "results" / f"tournament_h{horizon}.json"
         path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(json.dumps(result, indent=2, default=str))
+        path.write_text(json.dumps(result, indent=2, default=str), encoding="utf-8")
         store = DocumentStore(cfg)
         store.drop("models")
         for entry in leaderboard:

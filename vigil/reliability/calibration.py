@@ -69,7 +69,7 @@ def run_calibration(cfg: Optional[VigilConfig] = None, horizon: int = 1) -> Dict
         "verdict": ("calibration improved probability quality" if after["brier"] < before["brier"]
                     else "calibration did NOT improve probability quality on this dataset"),
     }
-    (cfg.reports_root / "results" / f"calibration_h{horizon}.json").write_text(json.dumps(summary, indent=2))
+    (cfg.reports_root / "results" / f"calibration_h{horizon}.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")
     log.info("calibration: ECE %.4f -> %.4f | Brier %.5f -> %.5f",
              before["ece"], after["ece"], before["brier"], after["brier"])
     return summary

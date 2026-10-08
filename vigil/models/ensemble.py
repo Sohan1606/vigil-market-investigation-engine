@@ -146,7 +146,7 @@ def run_ensemble(cfg: Optional[VigilConfig] = None, horizon: int = 1) -> Dict:
         "method": "softmax(-12 x trailing Brier), regime-conditioned, disagreement-shrunk",
     }
     (cfg.reports_root / "results" / f"ensemble_h{horizon}.json").write_text(
-        json.dumps(summary, indent=2, default=str))
+        json.dumps(summary, indent=2, default=str), encoding="utf-8")
     log.info("ensemble: brier=%.5f acc=%.4f mean_agreement=%.3f",
              metrics["brier"], metrics["accuracy"], summary["mean_agreement"])
     return summary

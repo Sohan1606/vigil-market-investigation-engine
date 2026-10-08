@@ -142,13 +142,13 @@ def test_second_process_waits_for_the_lock(tmp_path):
         "from vigil.storage.filelock import file_lock;"
         f"p=pathlib.Path(r'{out}');"
         f"\nwith file_lock(r'{lock}'):\n    p.write_text(p.read_text(encoding='utf-8')+'child\\n')\n")
-    out.write_text("")
+    out.write_text("", encoding="utf-8")
     with file_lock(lock):
         proc = subprocess.Popen([sys.executable, "-c", child_code])
         import time
 
         time.sleep(1.5)
-        out.write_text(out.read_text(encoding='utf-8') + "parent\n")
+        out.write_text(out.read_text(encoding='utf-8') + "parent\n", encoding="utf-8")
     proc.wait(timeout=30)
     assert out.read_text(encoding='utf-8').splitlines() == ["parent", "child"], "the child did not wait"
 
@@ -301,6 +301,31 @@ def test_windows_rebuild_script_mirrors_the_shell_script():
         assert shell not in body.lower(), f"the PowerShell script must not depend on {shell}"
     assert "$MyInvocation.MyCommand.Path" in ps1, "the script must resolve its own repo root"
     assert "exit 0" in ps1 and "$LASTEXITCODE" in ps1, "exit codes must be preserved"
+
+    # Cross-platform runner and UTF-8 encoding validation for Windows
+    runner = (ROOT / "tests" / "run_ui_smoke.mjs").read_text(encoding="utf-8")
+    assert "process.platform === 'win32'" in runner, "tests/run_ui_smoke.mjs must inspect process.platform"
+    assert "VIRTUAL_ENV" in runner, "tests/run_ui_smoke.mjs must resolve VIRTUAL_ENV"
+    assert "Scripts" in runner and "python.exe" in runner, "tests/run_ui_smoke.mjs must support Windows venv Scripts/python.exe" 
+
+    import ast
+    violations = []
+    for p in ROOT.rglob("*.py"):
+        if any(part in {".git", "node_modules", ".venv", "__pycache__"} for part in p.parts):
+            continue
+        code = p.read_text(encoding="utf-8", errors="ignore")
+        if "write_text" not in code:
+            continue
+        try:
+            tree = ast.parse(code)
+        except SyntaxError:
+            continue
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute) and node.func.attr == "write_text":
+                kw_names = [kw.arg for kw in node.keywords]
+                if "encoding" not in kw_names:
+                    violations.append(f"{p.relative_to(ROOT)}:{node.lineno}")
+    assert not violations, f"write_text calls missing explicit encoding (risking cp1252 crash on Windows): {violations}" 
 
 
 def test_readme_documents_both_platforms():

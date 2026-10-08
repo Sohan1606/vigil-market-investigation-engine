@@ -153,10 +153,10 @@ class LocalBackend:
             return []
         return sorted(p.name for p in zone_dir.iterdir() if p.is_dir())
 
-    def write_text(self, zone: str, dataset: str, name: str, text: str) -> None:
+    def write_text(self, zone: str, dataset: str, name: str, text: str, encoding: str = "utf-8") -> None:
         target = self.path(zone, dataset)
         target.mkdir(parents=True, exist_ok=True)
-        (target / name).write_text(text)
+        (target / name).write_text(text, encoding="utf-8")
 
     def read_text(self, zone: str, dataset: str, name: str) -> Optional[str]:
         p = self.path(zone, dataset) / name
@@ -285,7 +285,7 @@ class HdfsBackend:
         return sorted(f.base_name for f in self.fs.get_file_info(FileSelector(base))
                       if f.type == FileType.Directory)
 
-    def write_text(self, zone: str, dataset: str, name: str, text: str) -> None:
+    def write_text(self, zone: str, dataset: str, name: str, text: str, encoding: str = "utf-8") -> None:
         self.fs.create_dir(self.path(zone, dataset), recursive=True)
         with self.fs.open_output_stream(f"{self.path(zone, dataset)}/{name}") as fh:
             fh.write(text.encode())

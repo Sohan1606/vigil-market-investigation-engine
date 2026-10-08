@@ -143,7 +143,7 @@ class NewsIngestor:
                     log.warning("google news unavailable for %s (%s)", ins.symbol, type(exc).__name__)
                 docs.extend(self._yahoo(ins.symbol))
         if docs:
-            self.cache.write_text(json.dumps(docs, indent=2))
+            self.cache.write_text(json.dumps(docs, indent=2), encoding="utf-8")
         elif self.cache.exists():
             docs = json.loads(self.cache.read_text())
             log.warning("news served from local cache (network unavailable)")

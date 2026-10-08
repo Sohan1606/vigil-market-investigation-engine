@@ -314,5 +314,5 @@ class DocumentStore:
         out_dir.mkdir(parents=True, exist_ok=True)
         for name in COLLECTIONS:
             docs = self.find(name)
-            (out_dir / f"{name}.json").write_text(json.dumps(docs, indent=2, default=str))
+            (out_dir / f"{name}.json").write_text(json.dumps(docs, indent=2, default=str), encoding="utf-8")
         return out_dir

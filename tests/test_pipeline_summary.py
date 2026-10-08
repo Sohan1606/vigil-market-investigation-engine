@@ -56,6 +56,6 @@ def test_output_key_order_is_sorted():
 
 def test_corrupt_summary_file_is_replaced_not_crashed(tmp_path):
     path = tmp_path / "s.json"
-    path.write_text("{not json")
+    path.write_text("{not json", encoding="utf-8")
     payload, _ = merge_summary_file(path, {"ingest": {"rows": 1}}, {})
     assert payload["stages"]["ingest"]["rows"] == 1

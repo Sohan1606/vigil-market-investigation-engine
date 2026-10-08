@@ -53,7 +53,7 @@ def main() -> int:
         "result_artefacts": artefacts,
     }
     path = results_dir / "lineage_manifest.json"
-    path.write_text(json.dumps(out, indent=2))
+    path.write_text(json.dumps(out, indent=2), encoding="utf-8")
     print(f"{len(datasets)} datasets, {len(artefacts)} result artefacts → "
           f"{path.relative_to(ROOT)}\ncode {out['code_fingerprint']}  "
           f"frontend {out['frontend_fingerprint']}  config {out['config_fingerprint']}")

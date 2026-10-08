@@ -176,6 +176,6 @@ def generate_cases(cfg: Optional[VigilConfig] = None, max_cases: int = 60) -> Li
 
     store.drop("cases")
     store.insert_many("cases", cases)
-    (cfg.reports_root / "results" / "cases.json").write_text(json.dumps(cases, indent=2, default=str))
+    (cfg.reports_root / "results" / "cases.json").write_text(json.dumps(cases, indent=2, default=str), encoding="utf-8")
     log.info("cases generated: %d", len(cases))
     return cases

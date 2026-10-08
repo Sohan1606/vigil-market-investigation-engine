@@ -60,7 +60,7 @@ class Tracker:
                 [Path(REPO_ROOT) / a for a in (artifacts or [])], root=Path(REPO_ROOT)),
             "tags": tags or {},
         }
-        (self.root / f"{run['run_id']}.json").write_text(json.dumps(run, indent=2, default=str))
+        (self.root / f"{run['run_id']}.json").write_text(json.dumps(run, indent=2, default=str), encoding="utf-8")
         log.info("tracked run %s (%s)", run["run_id"], name)
         return run
 

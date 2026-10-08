@@ -131,7 +131,7 @@ def run_graph_analytics(cfg: Optional[VigilConfig] = None) -> Dict:
         "this as context, never as a causal claim.")
     out = cfg.reports_root / "results" / "graph.json"
     out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(json.dumps(result, indent=2))
+    out.write_text(json.dumps(result, indent=2), encoding="utf-8")
     log.info("graph: %d nodes %d edges modularity=%.3f communities=%d",
              result["n_nodes"], result["n_edges"], result["modularity"], len(result["communities"]))
     return result

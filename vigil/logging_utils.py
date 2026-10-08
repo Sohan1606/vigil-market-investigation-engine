@@ -67,5 +67,5 @@ def flush_metrics(path: Path) -> Path:
         except json.JSONDecodeError:
             existing = []
     payload = (existing + _METRICS)[-500:]
-    path.write_text(json.dumps(payload, indent=2, default=str))
+    path.write_text(json.dumps(payload, indent=2, default=str), encoding="utf-8")
     return path

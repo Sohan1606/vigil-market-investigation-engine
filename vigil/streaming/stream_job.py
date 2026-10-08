@@ -197,7 +197,7 @@ def run_stream(cfg: Optional[VigilConfig] = None, bus: Optional[EventBus] = None
             store.insert_many("events", anomalies)
         out = cfg.reports_root / "results" / "streaming_stats.json"
         out.parent.mkdir(parents=True, exist_ok=True)
-        out.write_text(json.dumps(res.to_dict(), indent=2, default=str))
+        out.write_text(json.dumps(res.to_dict(), indent=2, default=str), encoding="utf-8")
     log.info("stream pass: processed=%d dedup=%d throughput=%.0f ev/s anomalies=%d",
              res.events_processed, res.duplicates_filtered, res.throughput_eps, len(anomalies))
     return res

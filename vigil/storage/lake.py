@@ -113,7 +113,7 @@ class DataLake:
             "storage_mode": self.storage_mode,
             "uri": self.uri(zone, dataset),
         }
-        self.backend.write_text(zone, dataset, "_vigil_manifest.json", json.dumps(manifest, indent=2))
+        self.backend.write_text(zone, dataset, "_vigil_manifest.json", json.dumps(manifest, indent=2), encoding="utf-8")
 
     # ---------------- read ----------------
     def read(self, zone: str, dataset: str, columns: Optional[List[str]] = None,

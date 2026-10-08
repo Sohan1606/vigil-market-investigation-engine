@@ -113,7 +113,7 @@ class MarketDataSource:
 
     def write_provenance(self, path: Path) -> Path:
         path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(json.dumps([asdict(p) for p in self.provenance], indent=2))
+        path.write_text(json.dumps([asdict(p) for p in self.provenance], indent=2), encoding="utf-8")
         return path
 
 
@@ -162,7 +162,7 @@ class NewsSource:
                             "source": "YAHOO_FINANCE_NEWS",
                         })
                 if docs:
-                    self.cache.write_text(json.dumps(docs, indent=2))
+                    self.cache.write_text(json.dumps(docs, indent=2), encoding="utf-8")
             except Exception as exc:
                 log.warning("news fetch unavailable (%s)", type(exc).__name__)
         if not docs and self.cache.exists():

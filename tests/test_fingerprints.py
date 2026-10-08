@@ -13,15 +13,15 @@ from vigil.mlops.fingerprints import (artefact_fingerprints, bytes_digest, file_
 def _tree(tmp_path: Path) -> Path:
     root = tmp_path / "pkg"
     (root / "sub").mkdir(parents=True)
-    (root / "a.py").write_text("x = 1\n")
-    (root / "sub" / "b.py").write_text("y = 2\n")
+    (root / "a.py").write_text("x = 1\n", encoding="utf-8")
+    (root / "sub" / "b.py").write_text("y = 2\n", encoding="utf-8")
     return root
 
 
 def test_same_length_edit_changes_the_fingerprint(tmp_path):
     root = _tree(tmp_path)
     before = tree_fingerprint(root)
-    (root / "a.py").write_text("x = 9\n")          # identical byte count
+    (root / "a.py").write_text("x = 9\n", encoding="utf-8")          # identical byte count
     after = tree_fingerprint(root)
     assert before != after
 
@@ -36,7 +36,7 @@ def test_rename_changes_the_tree_but_not_the_content_digest(tmp_path):
 def test_fingerprint_is_deterministic_and_order_independent(tmp_path):
     root = _tree(tmp_path)
     first = tree_fingerprint(root)
-    (root / "sub" / "c.py").write_text("z = 3\n")
+    (root / "sub" / "c.py").write_text("z = 3\n", encoding="utf-8")
     (root / "sub" / "c.py").unlink()
     assert tree_fingerprint(root) == first
 
@@ -54,15 +54,15 @@ def test_caches_are_excluded(tmp_path):
     root = _tree(tmp_path)
     before = tree_fingerprint(root)
     (root / "__pycache__").mkdir()
-    (root / "__pycache__" / "a.py").write_text("garbage\n")
+    (root / "__pycache__" / "a.py").write_text("garbage\n", encoding="utf-8")
     assert tree_fingerprint(root) == before
 
 
 def test_artefact_fingerprints_are_content_based(tmp_path):
     f = tmp_path / "r.json"
-    f.write_text('{"a": 1}')
+    f.write_text('{"a": 1}', encoding="utf-8")
     one = artefact_fingerprints([f], root=tmp_path)
-    f.write_text('{"a": 2}')
+    f.write_text('{"a": 2}', encoding="utf-8")
     two = artefact_fingerprints([f], root=tmp_path)
     assert one[0]["path"] == two[0]["path"] == "r.json"
     assert one[0]["sha"] != two[0]["sha"]

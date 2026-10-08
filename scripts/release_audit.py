@@ -461,9 +461,9 @@ def main() -> int:
                        f"{rec.counts()[FAIL]} failing condition(s), "
                        f"{rec.counts()[NOT_EXECUTED]} condition(s) not executable in this "
                        f"environment (reported, not assumed)."])
-    (ROOT / "reports" / "RELEASE_AUDIT.md").write_text(md)
+    (ROOT / "reports" / "RELEASE_AUDIT.md").write_text(md, encoding="utf-8")
     (ROOT / "reports" / "results" / "release_audit.json").write_text(
-        json.dumps({"generated_at": ts, **rec.to_json()}, indent=2))
+        json.dumps({"generated_at": ts, **rec.to_json()}, indent=2), encoding="utf-8")
     rec.print_summary()
     print(f"\n{'RELEASE APPROVED' if rec.exit_code() == 0 else 'RELEASE BLOCKED'} "
           f"→ reports/RELEASE_AUDIT.md")

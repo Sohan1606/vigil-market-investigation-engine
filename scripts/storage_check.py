@@ -37,7 +37,7 @@ def main() -> int:
               "fix the checklist above or set STORAGE_MODE=local.")
     out = cfg.reports_root / "results" / "storage_check.json"
     out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(json.dumps(st.to_dict(), indent=2))
+    out.write_text(json.dumps(st.to_dict(), indent=2), encoding="utf-8")
     return 0 if ok else 1
 
 

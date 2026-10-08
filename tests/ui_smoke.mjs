@@ -1,3 +1,4 @@
+﻿import { fileURLToPath, pathToFileURL } from 'node:url';
 /* VIGIL front-end smoke test (jsdom).
  *
  *   npm install && npm run ui-smoke      <- single command: boots the API, runs this, stops it
@@ -17,7 +18,7 @@ import path from 'path';
 import { performance as perf } from 'node:perf_hooks';
 
 const BASE = process.env.VIGIL_URL || 'http://127.0.0.1:8000';
-const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const dom = new JSDOM(fs.readFileSync(path.join(ROOT, 'apps/web/app.html'), 'utf8'),
   { url: `${BASE}/app`, pretendToBeVisual: true });
 const { window } = dom;
@@ -59,7 +60,7 @@ const text = () => view().textContent.replace(/\s+/g, ' ').trim();
   landingDom.window.close();
 }
 
-await import(path.join(ROOT, 'apps/web/js/app.js'));
+await import(pathToFileURL(path.join(ROOT, 'apps/web/js/app.js')).href);
 await wait(2500);
 
 // ---------------------------------------------------------------- app shell
@@ -108,7 +109,7 @@ if (window.document.querySelector('.drawer.open')) failures.push('drawer did not
 const input = window.document.getElementById('search');
 input.value = 'infosys';
 input.dispatchEvent(new window.Event('input'));
-await wait(1200);
+await wait(3000);
 const hits = [...window.document.querySelectorAll('#search-results a')];
 log('search hits:', hits.length);
 if (!hits.length) failures.push('global search returned nothing for "infosys"');
@@ -178,6 +179,10 @@ await wait(4000);
   if (!controls) failures.push('workspace exposes no interactive controls');
 }
 
-log(`\n${failures.length ? 'FAILURES' : 'ALL FRONT-END CHECKS PASSED (jsdom — not a browser: no layout, CSS or paint)'}`);
+log(`\n${failures.length ? 'FAILURES' : 'ALL FRONT-END CHECKS PASSED (jsdom â€” not a browser: no layout, CSS or paint)'}`);
 failures.forEach(f => log(' - ' + f.slice(0, 300)));
 process.exit(failures.length ? 1 : 0);
+
+
+
+

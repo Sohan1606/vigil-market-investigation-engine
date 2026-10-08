@@ -116,7 +116,7 @@ def build_dataset(cfg: Optional[VigilConfig] = None, persist: bool = True) -> Tu
     if persist:
         lake.write(data, "features", "model_matrix", partition_cols=("symbol", "year"))
         (cfg.reports_root / "results" / "dataset_meta.json").write_text(
-            pd.Series(meta).to_json(indent=2))
+            pd.Series(meta).to_json(indent=2), encoding="utf-8")
     log.info("model matrix: rows=%d features=%d rolling_5d_context_rows=%.2f%%",
              meta["rows"], meta["n_features"], meta["rolling_5d_context_rows_pct"])
     return data, meta
@@ -153,7 +153,7 @@ def dataset_meta_from_matrix(cfg: Optional[VigilConfig] = None, persist: bool = 
         "source": "recomputed from lake://features/model_matrix (no rebuild, no retraining)",
     }
     if persist:
-        (cfg.reports_root / "results" / "dataset_meta.json").write_text(json.dumps(meta, indent=2))
+        (cfg.reports_root / "results" / "dataset_meta.json").write_text(json.dumps(meta, indent=2), encoding="utf-8")
     return meta
 
 

@@ -92,7 +92,7 @@ def build_pattern_library(cfg: Optional[VigilConfig] = None, horizon: int = 5) -
     store = DocumentStore(cfg)
     store.drop("patterns")
     store.insert_many("patterns", library)
-    (cfg.reports_root / "results" / "patterns.json").write_text(json.dumps(library, indent=2))
+    (cfg.reports_root / "results" / "patterns.json").write_text(json.dumps(library, indent=2), encoding="utf-8")
     log.info("pattern library: %d patterns, %d currently active",
              len(library), sum(1 for p in library if p["currently_active"]))
     return library

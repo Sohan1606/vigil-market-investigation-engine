@@ -1,17 +1,20 @@
 {
   "name": "vigil-ui-smoke",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "private": true,
-  "description": "Front-end smoke test harness for VIGIL \u2014 Investigate before you believe.",
+  "description": "Front-end smoke test harness for VIGIL — Investigate before you believe.",
   "type": "module",
   "scripts": {
     "ui-smoke": "node tests/run_ui_smoke.mjs",
     "ui-smoke:attach": "node tests/ui_smoke.mjs"
   },
   "devDependencies": {
-    "jsdom": "^26.0.0"
+    "jsdom": "^26.1.0"
   },
   "engines": {
     "node": ">=18"
+  },
+  "dependencies": {
+    "puppeteer-core": "^24.43.1"
   }
 }

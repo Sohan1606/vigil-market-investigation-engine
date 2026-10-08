@@ -282,7 +282,7 @@ def run_experiments(cfg: Optional[VigilConfig] = None, horizon: int = 1,
            "integrity_note": "All arms share one protocol, one seed and one dataset version. "
                              "Negative results are published as-is."}
     (cfg.reports_root / "results" / f"experiments_h{horizon}.json").write_text(
-        json.dumps(out, indent=2, default=str))
+        json.dumps(out, indent=2, default=str), encoding="utf-8")
     store = DocumentStore(cfg)
     store.drop("experiments")
     for r in results:

@@ -35,7 +35,7 @@ def run_ingestion(cfg: Optional[VigilConfig] = None, allow_network: bool = True)
 
     qpath = cfg.reports_root / "results" / "data_quality.json"
     qpath.parent.mkdir(parents=True, exist_ok=True)
-    qpath.write_text(json.dumps(report.to_dict(), indent=2))
+    qpath.write_text(json.dumps(report.to_dict(), indent=2), encoding="utf-8")
 
     news = NewsIngestor(cfg).fetch(allow_network=allow_network)
     store.drop("news")
@@ -63,7 +63,7 @@ def run_ingestion(cfg: Optional[VigilConfig] = None, allow_network: bool = True)
             "figure lives in dataset_meta.json as rolling_5d_context_rows_pct."),
         "docstore_backend": store.status().backend,
     }
-    (cfg.reports_root / "results" / "ingestion_summary.json").write_text(json.dumps(summary, indent=2))
+    (cfg.reports_root / "results" / "ingestion_summary.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")
     log.info("ingestion summary: %s", summary)
     return summary
 
@@ -89,7 +89,7 @@ def refresh_coverage_metadata(cfg: Optional[VigilConfig] = None) -> dict:
         "direct_session_coverage_pct = (symbol, session) pairs with a headline published on "
         "that session / all (symbol, session) pairs. The separate rolling 5-day context "
         "figure lives in dataset_meta.json as rolling_5d_context_rows_pct.")
-    path.write_text(json.dumps(summary, indent=2))
+    path.write_text(json.dumps(summary, indent=2), encoding="utf-8")
     log.info("coverage metadata refreshed: %s", {k: summary[k] for k in
                                                  ("news_documents", "direct_session_coverage_pct")})
     return summary

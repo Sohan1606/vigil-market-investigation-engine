@@ -249,6 +249,6 @@ def build_features(cfg: Optional[VigilConfig] = None, force_pandas: bool = False
     }
     path = cfg.reports_root / "results" / "feature_build.json"
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(meta, indent=2))
+    path.write_text(json.dumps(meta, indent=2), encoding="utf-8")
     log.info("features built: %s", meta)
     return pdf, meta

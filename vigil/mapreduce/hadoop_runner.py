@@ -323,7 +323,7 @@ def run_hadoop_suite(cfg: Optional[VigilConfig] = None) -> Dict[str, Any]:
         raise RuntimeError(f"no usable Hadoop client: {env.detail}")
     for job in JOBS.values():
         out["jobs"].append(run_streaming_job(job, cfg, env))
-    (cfg.reports_root / "results" / "hadoop_jobs.json").write_text(json.dumps(out, indent=2))
+    (cfg.reports_root / "results" / "hadoop_jobs.json").write_text(json.dumps(out, indent=2), encoding="utf-8")
     return out
 
 

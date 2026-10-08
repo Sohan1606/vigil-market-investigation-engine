@@ -175,7 +175,7 @@ def run_decision_quality(cfg: Optional[VigilConfig] = None, horizon: int = 1,
             "abstention as a good decision and therefore rewarded inaction (99.18% while acting on "
             "4.08% of opportunities). No replacement aggregates abstention into a success rate."),
     }
-    (cfg.reports_root / "results" / f"decision_quality_h{horizon}.json").write_text(json.dumps(out, indent=2))
+    (cfg.reports_root / "results" / f"decision_quality_h{horizon}.json").write_text(json.dumps(out, indent=2), encoding="utf-8")
     log.info("decision quality: coverage=%.2f%% selective_acc=%s utility=%.3f bps avoidance=%.2f bps",
              out["action_coverage_pct"], out["selective_accuracy_pct"],
              out["decision_utility_bps"], out["downside_avoidance_bps"])

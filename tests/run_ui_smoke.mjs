@@ -1,4 +1,4 @@
-/* Single-command VIGIL front-end smoke test.
+﻿/* Single-command VIGIL front-end smoke test.
  *
  *     npm install        # once: installs jsdom
  *     npm run ui-smoke   # starts the API, renders the whole app, stops the API
@@ -14,9 +14,10 @@
 import { spawn } from 'node:child_process';
 import path from 'node:path';
 import process from 'node:process';
+import { fileURLToPath } from 'node:url';
 import net from 'node:net';
 
-const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 const freePort = () => new Promise((resolve, reject) => {
   const srv = net.createServer();
@@ -41,7 +42,33 @@ async function waitForHealth(base, timeoutMs = 90000) {
   return false;
 }
 
-const python = process.env.PYTHON || 'python3';
+import fs from 'node:fs';
+
+function resolvePython() {
+  if (process.env.PYTHON) {
+    return process.env.PYTHON;
+  }
+  const isWin = process.platform === 'win32';
+  if (process.env.VIRTUAL_ENV) {
+    const venvPython = isWin
+      ? path.join(process.env.VIRTUAL_ENV, 'Scripts', 'python.exe')
+      : path.join(process.env.VIRTUAL_ENV, 'bin', 'python');
+    if (fs.existsSync(venvPython)) {
+      return venvPython;
+    }
+  }
+  return isWin ? 'python' : 'python3';
+}
+
+const python = resolvePython();
+if (path.isAbsolute(python) && !fs.existsSync(python)) {
+  console.error('[ui-smoke] Resolved Python executable does not exist:');
+  console.error(`  platform:    ${process.platform}`);
+  console.error(`  VIRTUAL_ENV: ${process.env.VIRTUAL_ENV || '(not set)'}`);
+  console.error(`  resolved:    ${python}`);
+  console.error(`  PATH:        ${process.env.PATH || '(not set)'}`);
+  process.exit(1);
+}
 const port = process.env.VIGIL_PORT || await freePort();
 const base = `http://127.0.0.1:${port}`;
 
@@ -71,3 +98,4 @@ stop();
 await sleep(300);
 console.log(`[ui-smoke] finished with exit code ${code}`);
 process.exit(code);
+

@@ -158,5 +158,5 @@ def run_regime_engine(cfg: Optional[VigilConfig] = None) -> Tuple[pd.DataFrame, 
         "last_transitions": [{"date": str(d.date()), "regime": r}
                              for d, r in transitions.tail(8).itertuples(index=False)],
     }
-    (cfg.reports_root / "results" / "regime.json").write_text(json.dumps(meta, indent=2))
+    (cfg.reports_root / "results" / "regime.json").write_text(json.dumps(meta, indent=2), encoding="utf-8")
     return merged, meta
